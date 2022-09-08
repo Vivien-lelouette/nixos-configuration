@@ -7,9 +7,10 @@
       system = "x86_64-linux";
       modules =
         [
+      	  ./computers/desktop.nix
           ./modules/base.nix
           ./modules/gaming.nix
-	  ./computers/desktop.nix
+      	  ./modules/music.nix
         ];
     };
 

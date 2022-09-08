@@ -123,6 +123,8 @@
      wget
      git
      stow
+     gcc
+     sqlite
      #haskellPackages.kmonad
   ];
 }
