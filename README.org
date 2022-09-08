@@ -1,0 +1,19 @@
+# Nixos configuration
+
+This repo contains my nixos configuration.
+
+To build this configuration on a given computer, simply run:
+#+BEGIN_SRC shell
+  sudo nixos-rebuild switch --flake github:Vivien-lelouette/nixos-configuration#<computer-name>
+#+END_SRC
+
+You need the flake experimental feature for this to work.
+In your initial configuration.nix, you must add the following:
+
+#+BEGIN_SRC shell
+    nix = {
+       package = pkgs.nixFlakes;
+       extraOptions = 
+	 ''experimental-features = nix-command flakes'';
+    }; 
+#+END_SRC
