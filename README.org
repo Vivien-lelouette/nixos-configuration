@@ -1,11 +1,6 @@
 # Nixos configuration
 
-This repo contains my nixos configuration.
-
-To build this configuration on a given computer, simply run:
-#+BEGIN_SRC shell
-  sudo nixos-rebuild switch --flake github:Vivien-lelouette/nixos-configuration#<computer-name>
-#+END_SRC
+This repo contains my Nixos configuration.
 
 You need the flake experimental feature for this to work.
 In your initial configuration.nix, you must add the following:
@@ -17,3 +12,21 @@ In your initial configuration.nix, you must add the following:
 	 ''experimental-features = nix-command flakes'';
     }; 
 #+END_SRC
+
+To build this configuration on a given computer, simply run the following command after cloning the project to ~/.nixos-configuration:
+#+BEGIN_SRC shell
+  sudo nixos-rebuild switch --flake ~/.nixos-configuration#<computer-name>
+#+END_SRC
+
+To update Nixos and its dependencies, you must update the flake.lock file and the rebuild.
+To do so, an easy way is to create a container:
+#+BEGIN_SRC shell
+  sudo nixos-container create config --flake ~/.nixos-configuration
+#+END_SRC
+
+You can then ask Nix to update the flake.lock of this container:
+#+BEGIN_SRC shell
+  sudo nixos-container update config --update-input nixpkgs
+#+END_SRC
+
+You can then commit and push the new flake.lock.

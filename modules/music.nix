@@ -5,7 +5,9 @@
     packages = with pkgs; [
       ardour
       guitarix
+      wineWowPackages.stable
       yabridge
+      yabridgectl
     ];
   };
 } 

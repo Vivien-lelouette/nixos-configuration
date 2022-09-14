@@ -11,6 +11,7 @@
     packages = with pkgs; [
       emacs
       vivaldi
+      gimp
     ];
   };
 
