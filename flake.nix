@@ -14,5 +14,13 @@
         ];
     };
 
+    nixosConfigurations.t450 = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules =
+        [
+          ./computers/t450.nix
+          ./modules/base.nix
+        ];
+    };
   };
 }
