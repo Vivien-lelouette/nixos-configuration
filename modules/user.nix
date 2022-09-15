@@ -11,6 +11,7 @@
     packages = with pkgs; [
       vivaldi
       gimp
+      openjdk
     ];
   };
 

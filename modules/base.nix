@@ -126,6 +126,7 @@
      gcc
      sqlite
      emacs
+     zsh
      #haskellPackages.kmonad
   ];
 }
