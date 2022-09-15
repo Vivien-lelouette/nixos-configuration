@@ -115,6 +115,8 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
 
+  # Give EXWM permission to control the session.
+  services.xserver.displayManager.sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -125,6 +127,7 @@
      stow
      gcc
      sqlite
+     emacs
      #haskellPackages.kmonad
   ];
 }
