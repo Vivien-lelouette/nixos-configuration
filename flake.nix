@@ -14,6 +14,17 @@
         ];
     };
 
+    nixosConfigurations.p15s = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules =
+        [
+          ./computers/p15s.nix
+          ./modules/base.nix
+          ./modules/gaming.nix
+          ./modules/music.nix
+        ];
+    };
+
     nixosConfigurations.t450 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules =
