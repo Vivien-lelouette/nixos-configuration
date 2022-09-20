@@ -113,9 +113,6 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
 
-  # Give EXWM permission to control the session.
-  services.xserver.displayManager.sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
-
   # Necessary for GTK themes
   programs.dconf.enable = true;
 
@@ -142,6 +139,9 @@
      libappindicator-gtk3
      libappindicator-gtk2
   ];
-
-  environment.variables.GTK_MODULES = "unity-gtk-module";
+  
+  # Give EXWM permission to control the session and start keyd
+  services.xserver.displayManager.sessionCommands = ''
+    ${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER
+  '';
 }
