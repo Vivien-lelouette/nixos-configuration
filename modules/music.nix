@@ -1,11 +1,5 @@
 { config, pkgs, ... }:
-{
-  systemd.services."user@1000".serviceConfig.LimitNOFILE = "32768";
-  security.pam.loginLimits = [
-    { domain = "*"; item = "nofile"; type = "-"; value = "32768"; }
-    { domain = "*"; item = "memlock"; type = "-"; value = "32768"; }
-  ];
-  
+{  
   users.users.vivien = {
     packages = with pkgs; [
       ardour
@@ -13,6 +7,7 @@
       wineWowPackages.stable
       yabridge
       yabridgectl
+      qjackctl
     ];
   };
 
@@ -20,4 +15,8 @@
     gxplugins-lv2
   ];
   environment.variables.LV2_PATH = "/run/current-system/sw/lib/lv2";
+
+  security.pam.loginLimits = [
+    { domain = "*"; item = "memlock"; type = "-"; value = "unlimited"; }
+  ];
 } 
