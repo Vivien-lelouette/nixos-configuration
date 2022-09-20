@@ -126,7 +126,7 @@
      gcc
      sqlite
      emacs
-     zsh
+     fish
      materia-kde-theme
      materia-theme
      openjdk
