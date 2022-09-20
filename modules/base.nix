@@ -115,11 +115,13 @@
 
   # Give EXWM permission to control the session.
   services.xserver.displayManager.sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
- 
+
+  # Necessary for GTK themes
+  programs.dconf.enable = true;
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     dconf
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
      git
@@ -129,11 +131,17 @@
      emacs
      zsh
      materia-kde-theme
+     materia-theme
      openjdk
      python2
      python39
      pywal
      wpgtk
-     #haskellPackages.kmonad
+     keyd
+     libunity
+     libappindicator-gtk3
+     libappindicator-gtk2
   ];
+
+  environment.variables.GTK_MODULES = "unity-gtk-module";
 }
