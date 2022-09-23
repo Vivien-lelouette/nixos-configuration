@@ -1,6 +1,6 @@
 cd ~
 
-git clone -b standard-emacs git@github.com:Vivien-lelouette/dotfiles.git .dotfiles
+git clone -b main git@github.com:Vivien-lelouette/dotfiles.git .dotfiles
 
 cd ~/.dotfiles
 
