@@ -11,6 +11,8 @@
     packages = with pkgs; [
       vivaldi
       gimp
+      unzip
+      p7zip
     ];
   };
 

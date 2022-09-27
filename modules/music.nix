@@ -19,6 +19,8 @@
     cardinal
     mda_lv2
     x42-plugins
+    fluidsynth
+    soundfont-fluid
   ];
   environment.variables.LV2_PATH = "/run/current-system/sw/lib/lv2";
 
