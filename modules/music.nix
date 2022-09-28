@@ -21,6 +21,7 @@
     x42-plugins
     fluidsynth
     soundfont-fluid
+    sfizz
   ];
   environment.variables.LV2_PATH = "/run/current-system/sw/lib/lv2";
 

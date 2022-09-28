@@ -116,6 +116,16 @@
   # Necessary for GTK themes
   programs.dconf.enable = true;
 
+
+  nixpkgs.overlays = [
+    (
+      self: super:
+      {
+        appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
+      }
+    )
+  ];
+  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -135,9 +145,7 @@
      pywal
      wpgtk
      keyd
-     libunity
-     libappindicator-gtk3
-     libappindicator-gtk2
+     appmenu-gtk3-module
   ];
   
   # Give EXWM permission to control the session and start keyd
