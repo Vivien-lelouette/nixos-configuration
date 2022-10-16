@@ -63,6 +63,17 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # Enable scanner support
+  users.users.vivien.extraGroups = [ "scanner" "lp" ];
+  hardware = {
+    sane = {
+      enable = true;
+      brscan4 = {
+        enable = true;
+      };
+    };
+  };
+  
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
@@ -168,6 +179,7 @@
      groff
      gnumake
      unclutter
+     simple-scan
   ];
 
   services.unclutter.enable = true;
