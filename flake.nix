@@ -33,5 +33,15 @@
           ./modules/base.nix
         ];
     };
+
+    nixosConfigurations.xps = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules =
+      [
+        ./computers/xps.nix
+        ./modules/base.nix
+        ./modules/development.nix
+      ];
+    };
   };
 }
