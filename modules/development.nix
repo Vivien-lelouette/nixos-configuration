@@ -13,6 +13,9 @@
     docker-compose
     python39Packages.pip
     sqls
+    nodePackages.typescript
+    nodePackages.typescript-language-server
+    nodePackages.eslint
   ];
 
   users.users.vivien.packages = with pkgs; [
