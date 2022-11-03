@@ -163,6 +163,7 @@
      fish
      materia-kde-theme
      materia-theme
+     dracula-theme
      openjdk
      python2
      python39
