@@ -12,6 +12,9 @@
     docker
     docker-compose
     python39Packages.pip
+    dbeaver
+
+    # LSPs
     sqls
     nodePackages.typescript
     nodePackages.typescript-language-server

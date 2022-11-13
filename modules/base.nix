@@ -139,6 +139,11 @@
 
 
   nixpkgs.overlays = [
+    (import (builtins.fetchGit {
+      url = "https://github.com/nix-community/emacs-overlay.git";
+      ref = "master";
+      rev = "38fc843411aa7cd8406dfc4a2e457a7081bf2a91"; # change the revision
+    }))
     (
       self: super:
       {
@@ -148,6 +153,9 @@
   ];
 
   hardware.bluetooth.enable = true;
+
+  # Cachix setup
+  
   
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -159,7 +167,7 @@
      gcc
      glibc
      sqlite
-     emacs
+     emacsGit
      fish
      materia-kde-theme
      materia-theme
