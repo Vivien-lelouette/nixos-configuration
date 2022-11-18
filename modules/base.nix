@@ -204,4 +204,7 @@
   services.xserver.displayManager.sessionCommands = ''
     ${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER
   '';
+
+  # Allow /etc/hosts changes
+  environment.etc.hosts.mode = "0644";
 }
