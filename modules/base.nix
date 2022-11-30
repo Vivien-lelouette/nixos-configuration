@@ -177,7 +177,10 @@
      python39
      pywal
      wpgtk
+     xdotool
      keyd
+     warpd
+     unclutter
      appmenu-gtk3-module
      gnupg
      pinentry
@@ -187,8 +190,10 @@
      patchelf
      groff
      gnumake
-     unclutter
      simple-scan
+     offlineimap
+     mu
+     python310Packages.pipx
   ];
 
   services.unclutter.enable = true;
