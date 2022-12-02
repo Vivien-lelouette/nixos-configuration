@@ -144,12 +144,12 @@
       ref = "master";
       rev = "38fc843411aa7cd8406dfc4a2e457a7081bf2a91"; # change the revision
     }))
-    (
-      self: super:
-      {
-        appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
-      }
-    )
+    # (
+    #   self: super:
+    #   {
+    #     appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
+    #   }
+    # )
   ];
 
   hardware.bluetooth.enable = true;
@@ -181,7 +181,6 @@
      keyd
      warpd
      unclutter
-     appmenu-gtk3-module
      gnupg
      pinentry
      pinentry-qt
@@ -196,7 +195,7 @@
      python310Packages.pipx
   ];
 
-  services.unclutter.enable = true;
+  services.unclutter.enable = false;
 
   services.pcscd.enable = true;
   programs.gnupg.agent = {
