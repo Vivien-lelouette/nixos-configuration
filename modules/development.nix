@@ -8,7 +8,6 @@
   users.users.vivien.extraGroups = [ "docker" ];
 
   environment.systemPackages = with pkgs; [
-    google-chrome
     docker
     docker-compose
     python39Packages.pip

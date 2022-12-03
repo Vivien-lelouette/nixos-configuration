@@ -193,6 +193,7 @@
      offlineimap
      mu
      python310Packages.pipx
+     google-chrome
   ];
 
   services.unclutter.enable = false;
