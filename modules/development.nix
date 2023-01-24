@@ -12,6 +12,7 @@
     docker-compose
     python39Packages.pip
     dbeaver
+    rubyPackages_3_1.redis-client
 
     # LSPs
     sqls

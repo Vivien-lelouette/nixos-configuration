@@ -154,9 +154,10 @@
 
   hardware.bluetooth.enable = true;
 
-  # Cachix setup
-  
-  
+  nixpkgs.config.permittedInsecurePackages = [
+    "python-2.7.18.6"
+  ];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
