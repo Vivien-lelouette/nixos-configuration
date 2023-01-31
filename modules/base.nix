@@ -142,7 +142,7 @@
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/emacs-overlay.git";
       ref = "master";
-      rev = "38fc843411aa7cd8406dfc4a2e457a7081bf2a91"; # change the revision
+      rev = "2b15bcc895fbb78f6eab189f2cf03f576d376a62"; # change the revision
     }))
     # (
     #   self: super:
@@ -195,6 +195,7 @@
      mu
      python310Packages.pipx
      google-chrome
+     appimage-run
   ];
 
   services.unclutter.enable = false;
