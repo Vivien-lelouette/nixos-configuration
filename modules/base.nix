@@ -196,6 +196,9 @@
      python310Packages.pipx
      google-chrome
      appimage-run
+     gparted
+     writedisk
+     zip
   ];
 
   services.unclutter.enable = false;

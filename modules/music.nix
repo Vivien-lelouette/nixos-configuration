@@ -23,7 +23,7 @@
     soundfont-fluid
     sfizz
   ];
-  environment.variables.LV2_PATH = "/run/current-system/sw/lib/lv2";
+  environment.variables.LV2_PATH = "/run/current-system/sw/lib/lv2:$HOME/.lv2";
 
   security.pam.loginLimits = [
     { domain = "*"; item = "memlock"; type = "-"; value = "unlimited"; }
