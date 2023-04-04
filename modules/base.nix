@@ -199,6 +199,8 @@
      gparted
      writedisk
      zip
+     vlc
+     find-cursor
   ];
 
   services.unclutter.enable = false;
