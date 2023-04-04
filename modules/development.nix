@@ -26,7 +26,6 @@
     vscode
     nodejs-16_x
     beekeeper-studio
-    iredis
     redis
   ];
 }
