@@ -57,4 +57,9 @@
      pciutils
   ];
 
+  users.users.vivien = {
+    extraGroups = [
+      "libvirtd"
+    ];
+  };
 }
