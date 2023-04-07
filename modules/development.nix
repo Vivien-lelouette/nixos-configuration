@@ -25,7 +25,7 @@
     openvpn
     vscode
     nodejs-16_x
-    beekeeper-studio
     redis
+    postgresql
   ];
 }
