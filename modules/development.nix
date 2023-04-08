@@ -27,5 +27,6 @@
     nodejs-16_x
     redis
     postgresql
+    leiningen
   ];
 }
