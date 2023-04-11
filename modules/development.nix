@@ -28,5 +28,6 @@
     redis
     postgresql
     leiningen
+    maven
   ];
 }
