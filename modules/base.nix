@@ -143,7 +143,19 @@
       url = "https://github.com/nix-community/emacs-overlay.git";
       ref = "master";
       rev = "1195f952f1d610244a4b1b8b0b9dbd13ef6d553c"; # change the revision
-    }))
+    }
+    ))
+    (
+      self: super:
+      {
+        emacsGit-gtk =
+            super.emacsGit.override {
+              withX = true;
+              withGTK3 = true;
+              withWebP = true;
+            };
+      }
+    )
     # (
     #   self: super:
     #   {
@@ -168,7 +180,7 @@
      gcc
      glibc
      sqlite
-     emacsGit
+     emacsGit-gtk
      fish
      materia-kde-theme
      materia-theme
