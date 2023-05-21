@@ -207,6 +207,7 @@
      mu
      python310Packages.pipx
      google-chrome
+     firefox
      appimage-run
      gparted
      writedisk
