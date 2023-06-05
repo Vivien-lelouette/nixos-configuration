@@ -187,7 +187,7 @@
      dracula-theme
      openjdk
      python2
-     python39
+     python310
      pywal
      wpgtk
      xdotool
