@@ -32,6 +32,7 @@
   };
 
   networking.firewall.allowedTCPPortRanges = [
+    { from = 24070; to = 24070; }
     { from = 47984; to = 47984; }
     { from = 47989; to = 47990; }
     { from = 48010; to = 48010; }
