@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, self, ... }:
 {
   imports =
     [
@@ -52,7 +52,7 @@
 
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
@@ -90,16 +90,31 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-  environment.etc = {
-	  "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
-		bluez_monitor.properties = {
-			["bluez5.enable-sbc-xq"] = true,
-			["bluez5.enable-msbc"] = true,
-			["bluez5.enable-hw-volume"] = true,
-			["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
-		                                                }
-	'';
-  };
+
+  services.pipewire.wireplumber.configPackages = [
+          (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-bluez.conf" ''
+            monitor.bluez.properties = {
+              bluez5.roles = [ a2dp_sink a2dp_source bap_sink bap_source hsp_hs hsp_ag hfp_hf hfp_ag ]
+              bluez5.headset-roles = [ hsp_hs hsp_ag hfp_hf hfp_ag ]
+              bluez5.codecs = [ sbc sbc_xq aac ]
+              bluez5.enable-sbc-xq = true
+              bluez5.enable-msbc = true
+              bluez5.enable-hw-volume = true
+              bluez5.hfphsp-backend = "native"
+            }
+          '')
+        ];
+
+  #   {
+	#   "wireplumber/bluetooth.lua.d/51-bluez-config.lua".text = ''
+	# 	bluez_monitor.properties = {
+	# 		["bluez5.enable-sbc-xq"] = true,
+	# 		["bluez5.enable-msbc"] = true,
+	# 		["bluez5.enable-hw-volume"] = true,
+	# 		["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]"
+	# 	                                                }
+	# '';
+  # };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -142,7 +157,7 @@
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/emacs-overlay.git";
       ref = "master";
-      rev = "1195f952f1d610244a4b1b8b0b9dbd13ef6d553c"; # change the revision
+      rev = "5d0a10938c32f3cb95d1f1f18127948d239c6720"; # change the revision
     }
     ))
     (
@@ -150,26 +165,27 @@
       {
         emacsGit-gtk =
             super.emacsGit.override {
-              withX = true;
+              withX = false;
               withGTK3 = true;
               withWebP = true;
+              withPgtk = true;
             };
       }
     )
-    # (
-    #   self: super:
-    #   {
-    #     appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
-    #   }
-    # )
+    (
+      self: super:
+      {
+        appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
+      }
+    )
   ];
 
   hardware.bluetooth.enable = true;
 
   nixpkgs.config.permittedInsecurePackages = [
-    "python-2.7.18.6"
+    "python-2.7.18.8"
   ];
-
+  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -182,8 +198,6 @@
      sqlite
      emacsGit-gtk
      fish
-     materia-kde-theme
-     materia-theme
      dracula-theme
      openjdk
      python2
@@ -214,6 +228,8 @@
      zip
      vlc
      find-cursor
+     nyxt
+     libsForQt5.polonium
   ];
 
   services.unclutter.enable = false;
@@ -221,7 +237,7 @@
   services.pcscd.enable = true;
   programs.gnupg.agent = {
      enable = true;
-     pinentryFlavor = "qt";
+     # pinentryPackage = pkgs.pinentry-qt;
      enableSSHSupport = true;
   };
   
@@ -232,4 +248,63 @@
 
   # Allow /etc/hosts changes
   environment.etc.hosts.mode = "0644";
+
+  programs.nix-ld.enable = true;
+
+  ## If needed, you can add missing libraries here. nix-index-database is your friend to
+  ## find the name of the package from the error message:
+  ## https://github.com/nix-community/nix-index-database
+   programs.nix-ld.libraries = with pkgs; [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
+    cups
+    curl
+    dbus
+    expat
+    fontconfig
+    freetype
+    fuse3
+    gdk-pixbuf
+    glib
+    gtk3
+    icu
+    libGL
+    libappindicator-gtk3
+    libdrm
+    libglvnd
+    libnotify
+    libpulseaudio
+    libunwind
+    libusb1
+    libuuid
+    libxkbcommon
+    libxml2
+    mesa
+    nspr
+    nss
+    openssl
+    pango
+    pipewire
+    stdenv.cc.cc
+    systemd
+    vulkan-loader
+    xorg.libX11
+    xorg.libXScrnSaver
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libxcb
+    xorg.libxkbfile
+    xorg.libxshmfence
+    zlib
+  ];
 }

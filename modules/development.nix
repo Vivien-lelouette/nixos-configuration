@@ -7,12 +7,14 @@
   virtualisation.docker.enable = true;
   users.users.vivien.extraGroups = [ "docker" ];
 
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
   environment.systemPackages = with pkgs; [
     docker
     docker-compose
     python39Packages.pip
     dbeaver
     rubyPackages_3_1.redis-client
+    slack
 
     # LSPs
     sqls
@@ -24,7 +26,7 @@
   users.users.vivien.packages = with pkgs; [
     openvpn
     vscode
-    nodejs-16_x
+    nodejs_20
     redis
     postgresql
     leiningen

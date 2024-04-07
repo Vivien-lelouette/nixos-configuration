@@ -13,10 +13,10 @@
       gimp
       unzip
       p7zip
+      moonlight-qt
     ];
   };
 
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "vivien";
+  services.xserver.displayManager.autoLogin.enable = false;
 }
