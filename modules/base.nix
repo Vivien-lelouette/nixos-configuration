@@ -48,16 +48,43 @@
   };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  services.xserver = {
+    enable = true;
+    xkb.layout = "us";
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+  };
+
+  services.gnome.gnome-keyring.enable = true;
+  programs.seahorse.enable = true; # enable the graphical frontend
+  security.pam.services.gdm.enableGnomeKeyring = true;
+  security.pam.services.hyprlock = { };
 
   # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  # services.desktopManager.plasma6.enable = true;
 
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+  programs = {
+    hyprland = {
+      enable = true;
+      xwayland = {
+        enable = true;
+      };
+    };
+    waybar = {
+      enable = true;
+      package = pkgs.waybar.overrideAttrs (oldAttrs: {
+        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
+      });
+    };
+    thunar = {
+      enable = true;
+      plugins = with pkgs.xfce; [
+        thunar-archive-plugin
+        thunar-volman
+      ];
+    };
   };
 
   # Enable CUPS to print documents.
@@ -163,8 +190,8 @@
     (
       self: super:
       {
-        emacsGit-gtk =
-            super.emacsGit.override {
+        emacs-git-gtk =
+            super.emacs-git.override {
               withX = false;
               withGTK3 = true;
               withWebP = true;
@@ -181,6 +208,8 @@
   ];
 
   hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.8"
@@ -196,7 +225,7 @@
      gcc
      glibc
      sqlite
-     emacsGit-gtk
+     emacs-git-gtk
      fish
      dracula-theme
      openjdk
@@ -207,10 +236,12 @@
      xdotool
      keyd
      warpd
-     unclutter
+
+     pkgs.libsecret
      gnupg
      pinentry
      pinentry-qt
+     
      file
      zlib
      patchelf
@@ -227,12 +258,65 @@
      writedisk
      zip
      vlc
-     find-cursor
      nyxt
      libsForQt5.polonium
+
+     alacritty
+     polkit_gnome
+     libva-utils
+     fuseiso
+     udiskie
+     gnome.adwaita-icon-theme
+     gnome.gnome-themes-extra
+     gsettings-desktop-schemas
+     swaynotificationcenter
+     wlr-randr
+     ydotool
+
+     wl-clipboard
+     jq
+     hyprland-protocols
+     hyprpicker
+     hypridle
+     hyprlock
+     hyprpaper
+
+     wofi
+
+     slurp
+     grim
+     swappy
+     wf-recorder
+
+     xdg-utils
+     xdg-desktop-portal
+     xdg-desktop-portal-gtk
+     xdg-desktop-portal-hyprland
+     qt5.qtwayland
+     qt6.qmake
+     qt6.qtwayland
+     adwaita-qt
+     adwaita-qt6
+     networkmanagerapplet
   ];
 
-  services.unclutter.enable = false;
+  environment.sessionVariables = {
+    POLKIT_AUTH_AGENT = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+    GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
+    XDG_SESSION_TYPE = "wayland";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    WLR_NO_HARDWARE_CURSORS = "1";
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+    SDL_VIDEODRIVER = "wayland";
+    _JAVA_AWT_WM_NONREPARENTING = "1";
+    WLR_RENDERER = "vulkan";
+    CLUTTER_BACKEND = "wayland";
+    XDG_CURRENT_DESKTOP = "Hyprland";
+    XDG_SESSION_DESKTOP = "Hyprland";
+    GTK_USE_PORTAL = "1";
+    NIXOS_XDG_OPEN_USE_PORTAL = "1";
+  }; 
 
   services.pcscd.enable = true;
   programs.gnupg.agent = {

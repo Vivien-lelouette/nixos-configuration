@@ -18,5 +18,5 @@
   };
 
   # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = false;
+  services.displayManager.autoLogin.enable = false;
 }

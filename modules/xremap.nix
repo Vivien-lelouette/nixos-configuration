@@ -3,104 +3,74 @@
   services.xremap = {
     userName = "vivien";
     serviceMode = "user";
-    withKDE = true;
-    config = {
-      keymap = [
-      #   {
-      #     name = "Global";
-      #     application = { "not" = ["emacs"]; };
-      #     remap = {
-      #       # Cursor
-      #       "C-b" = "left";
-      #       "C-f" = "right";
-      #       "C-p" = "up";
-      #       "C-n" = "down";
-
-      #       # Forward/Backward word
-      #       "M-b" = "C-left";
-      #       "M-f" = "C-right";
-
-      #       # Beginning/End of line
-      #       "C-a" = "home";
-      #       "C-e" = "end";
-
-      #       # Page up/down
-      #       "M-v" = "pageup";
-      #       "C-v" = "pagedown";
-
-      #       # Beginning/End of file
-      #       "M-Shift-comma" = "C-home";
-      #       "M-Shift-dot" = "C-end";
-
-      #       # Newline
-      #       "C-m" = "enter";
-      #       "C-j" = "enter";
-      #       "C-o" = ["enter" "left"];
-
-      #       # Copy
-      #       "C-w" = "C-x";
-      #       "M-w" = "C-c";
-      #       "C-y" = "C-v";
-
-      #       # Delete
-      #       "C-d" = "delete";
-      #       "M-d" = "C-delete";
-
-      #       # Kill line
-      #       "C-k" = ["Shift-end" "C-x"];
-
-      #       # Undo
-      #       "C-slash" = "C-z";
-
-      #       # Search
-      #       "C-s" = "C-f";
-      #       "C-r" = "Shift-F3";
-
-      #       # Cancel
-      #       "C-g" = "esc";
-
-      #       "C-x" = {
-      #         remap = {
-      #           # C-x h (select all)
-      #           "h" = ["C-home" "C-a"];
-
-      #           # C-x C-f (open)
-      #           "C-f" = "C-o";
-
-      #           # C-x C-s (save)
-      #           "C-s" = "C-s";
-
-      #           # C-x k (kill tab)
-      #           "k" = "C-w";
-
-      #           # C-x C-c (exit)
-      #           "C-c" = "C-q";
-      #         };
-      #       };
-
-      #       "C-c" = {
-      #         remap = {
-      #           "C-c" = "C-enter";
-      #         };
-      #       };
-      #     };
-      #   }
-      #   {
-      #     name = "Konsole";
-      #     application = { "only" = ["org.kde.konsole"]; };
-      #     remap = {
-      #       # History search
-      #       "M-r" = "C-r";
-
-      #       "C-c" = {
-      #         remap = {
-      #           "C-c" = "C-c";
-      #         };
-      #       };
-      #     };
-      #   }
-      ]
-      ;
-    };
+    withWlroots = true;
+    watch = true;
+    yamlConfig = ''
+keymap:
+  - name: Emacs
+    application:
+      not: emacs
+    remap:
+      # Cursor
+      C-b: { with_mark: left }
+      C-f: { with_mark: right }
+      C-p: { with_mark: up }
+      C-n: { with_mark: down }
+      # Forward/Backward word
+      M-b: { with_mark: C-left }
+      M-f: { with_mark: C-right }
+      # Beginning/End of line
+      C-a: { with_mark: home }
+      C-e: { with_mark: end }
+      # Page up/down
+      M-v: { with_mark: pageup }
+      C-v: { with_mark: pagedown }
+      # Beginning/End of file
+      M-Shift-comma: { with_mark: C-home }
+      M-Shift-dot: { with_mark: C-end }
+      # Newline
+      C-m: enter
+      C-j: enter
+      C-o: [enter, left]
+      # Copy
+      C-w: [C-x, { set_mark: false }]
+      M-w: [C-c, { set_mark: false }]
+      C-y: [C-v, { set_mark: false }]
+      # Delete
+      C-d: [delete, { set_mark: false }]
+      M-d: [C-delete, { set_mark: false }]
+      # Kill line
+      C-k: [Shift-end, C-x, { set_mark: false }]
+      # Kill word backward
+      Alt-backspace: [C-backspace, {set_mark: false}]
+      # set mark next word continuously.
+      C-M-space: [C-Shift-right, {set_mark: true}]
+      # Undo
+      C-slash: [C-z, { set_mark: false }]
+      C-Shift-ro: C-z
+      # Mark
+      C-space: { set_mark: true }
+      # Search
+      C-s: C-f
+      C-r: Shift-F3
+      M-Shift-5: C-h
+      # Cancel
+      C-g: [esc, { set_mark: false }]
+      # C-x YYY
+      C-x:
+        remap:
+          # C-x h (select all)
+          h: [C-home, C-a, { set_mark: true }]
+          # C-x C-f (open)
+          C-f: C-o
+          # C-x C-s (save)
+          C-s: C-s
+          # C-x k (kill tab)
+          k: C-f4
+          # C-x C-c (exit)
+          C-c: C-q
+          # C-x u (undo)
+          u: [C-z, { set_mark: false }]
+'';
   };
 }
