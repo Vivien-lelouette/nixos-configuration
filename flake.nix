@@ -2,7 +2,10 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/master";
   inputs.xremap.url = "github:xremap/nix-flake";
 
-  outputs = { self, nixpkgs, xremap }: {
+  # TODO remove when this issue is fixed : https://github.com/NixOS/nixpkgs/issues/330889
+  inputs.dbeaver-last.url = "github:nixos/nixpkgs/4d10225ee46c0ab16332a2450b493e0277d1741a";
+
+  outputs = { self, nixpkgs, xremap, dbeaver-last }: {
 
     nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
@@ -51,6 +54,8 @@
         ./modules/base.nix
         ./modules/development.nix
       ];
+      # TODO remove when this issue is fixed : https://github.com/NixOS/nixpkgs/issues/330889
+      specialArgs = { inherit dbeaver-last; };
     };
   };
 }

@@ -72,6 +72,9 @@
         enable = true;
       };
     };
+    hyprlock = {
+      enable = true;
+    };
     waybar = {
       enable = true;
       package = pkgs.waybar.overrideAttrs (oldAttrs: {
@@ -86,6 +89,7 @@
       ];
     };
   };
+  services.hypridle.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -102,7 +106,6 @@
   };
   
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -163,10 +166,13 @@
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 1701 9001 ];
+    allowedUDPPorts = [ 1701 9001 ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -184,7 +190,7 @@
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/emacs-overlay.git";
       ref = "master";
-      rev = "5d0a10938c32f3cb95d1f1f18127948d239c6720"; # change the revision
+      rev = "452daa6ae6b49c84676abf57f3a0720d78193afd"; # change the revision
     }
     ))
     (
@@ -205,6 +211,16 @@
         appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
       }
     )
+    (
+      self: super:
+      {
+        warpd-wayland =
+            super.warpd.override {
+              withWayland = true;
+              withX = false;
+            };
+      }
+    )
   ];
 
   hardware.bluetooth.enable = true;
@@ -213,8 +229,14 @@
 
   nixpkgs.config.permittedInsecurePackages = [
     "python-2.7.18.8"
+    "electron-27.3.11"
   ];
-  
+
+  programs.kdeconnect = {
+    enable = true;
+    package = pkgs.valent;
+  };
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -230,12 +252,31 @@
      dracula-theme
      openjdk
      python2
-     python310
+     python311
      pywal
      wpgtk
      xdotool
      keyd
-     warpd
+     warpd-wayland
+     w3m
+     links2
+     lynx
+
+     sshpass
+
+     texlive.combined.scheme-full
+
+     thunderbird
+
+     pkg-config
+
+     enchant
+     hunspell
+     hunspellDicts.fr-any
+     hunspellDicts.en_US
+     emacsPackages.jinx
+
+     logseq
 
      pkgs.libsecret
      gnupg
@@ -248,37 +289,39 @@
      groff
      gnumake
      simple-scan
-     offlineimap
-     mu
-     python310Packages.pipx
+
+     pipx
+
+     qutebrowser
      google-chrome
      firefox
+     filezilla
+
      appimage-run
      gparted
      writedisk
      zip
      vlc
-     nyxt
-     libsForQt5.polonium
+
+     weylus
+
+     d2
 
      alacritty
      polkit_gnome
      libva-utils
      fuseiso
      udiskie
-     gnome.adwaita-icon-theme
-     gnome.gnome-themes-extra
+     adwaita-icon-theme
+     gnome-themes-extra
      gsettings-desktop-schemas
      swaynotificationcenter
-     wlr-randr
      ydotool
 
-     wl-clipboard
+     glib
+
      jq
-     hyprland-protocols
      hyprpicker
-     hypridle
-     hyprlock
      hyprpaper
 
      wofi
@@ -287,11 +330,9 @@
      grim
      swappy
      wf-recorder
+     xfce.tumbler
+     xfce.ristretto
 
-     xdg-utils
-     xdg-desktop-portal
-     xdg-desktop-portal-gtk
-     xdg-desktop-portal-hyprland
      qt5.qtwayland
      qt6.qmake
      qt6.qtwayland
@@ -300,22 +341,18 @@
      networkmanagerapplet
   ];
 
+  services.dbus.enable = true;
+
   environment.sessionVariables = {
     POLKIT_AUTH_AGENT = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
     GSETTINGS_SCHEMA_DIR = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
-    XDG_SESSION_TYPE = "wayland";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
     MOZ_ENABLE_WAYLAND = "1";
     SDL_VIDEODRIVER = "wayland";
     _JAVA_AWT_WM_NONREPARENTING = "1";
-    WLR_RENDERER = "vulkan";
     CLUTTER_BACKEND = "wayland";
-    XDG_CURRENT_DESKTOP = "Hyprland";
-    XDG_SESSION_DESKTOP = "Hyprland";
-    GTK_USE_PORTAL = "1";
-    NIXOS_XDG_OPEN_USE_PORTAL = "1";
   }; 
 
   services.pcscd.enable = true;
@@ -338,7 +375,7 @@
   ## If needed, you can add missing libraries here. nix-index-database is your friend to
   ## find the name of the package from the error message:
   ## https://github.com/nix-community/nix-index-database
-   programs.nix-ld.libraries = with pkgs; [
+  programs.nix-ld.libraries = with pkgs; [
     alsa-lib
     at-spi2-atk
     at-spi2-core

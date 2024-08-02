@@ -6,7 +6,52 @@
     withWlroots = true;
     watch = true;
     yamlConfig = ''
+modmap:
+  - name: Ergonomic
+    remap:
+      Alt_L: Ctrl_L
+      Ctrl_L: Alt_L
+      Alt_R: Alt_L
 keymap:
+  - name: thunderbird
+    application:
+      only: thunderbird
+    remap:
+      M-x: C-k
+  - name: qutebrowser
+    application:
+      only: qutebrowser
+    remap:
+      C-x:
+        remap:
+          # C-x h (select all)
+          h: [C-home, C-a, { set_mark: true }]
+          # C-x C-f (open)
+          C-f: C-o
+          # C-x C-s (save)
+          C-s: C-s
+          # C-x C-c (exit)
+          C-c: C-q
+          # C-x u (undo)
+          u: [C-z, { set_mark: false }]
+          # C-x k (kill tab)
+          k: [C-q, k]
+          g: [C-q, g]
+          b: [C-q, b]
+          C-b: [C-q, C-b]
+          Shift-b: [C-q, Shift-b]
+          m: C-d
+          C-m: C-d
+          r:
+            remap:
+              b: [C-q, r, b]
+              m: [C-q, r, m]
+              l: [C-q, r, l]
+              k: [C-q, r, k]
+              l: [C-q, r, l]
+      C-c: C-Shift-q
+      C-s: C-s
+      C-r: C-r
   - name: Emacs
     application:
       not: emacs
@@ -56,7 +101,6 @@ keymap:
       M-Shift-5: C-h
       # Cancel
       C-g: [esc, { set_mark: false }]
-      # C-x YYY
       C-x:
         remap:
           # C-x h (select all)
