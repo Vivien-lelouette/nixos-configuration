@@ -2,25 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, self, ... }:
+{ config, pkgs, self, inputs, ... }:
 {
   imports =
     [
       # User files
       ./user.nix
-      ./virtualization.nix
+      # ./virtualization.nix
     ];
 
   nix = {
-     package = pkgs.nixFlakes;
+     package = pkgs.nixVersions.stable;
      extraOptions = 
        ''experimental-features = nix-command flakes'';
   }; 
-
-  # Bootloader.
-  # boot.loader.systemd-boot.enable = true;
-
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -66,7 +61,7 @@
   # services.desktopManager.plasma6.enable = true;
 
   programs = {
-    hyprland = {
+    river = {
       enable = true;
       xwayland = {
         enable = true;
@@ -74,12 +69,6 @@
     };
     hyprlock = {
       enable = true;
-    };
-    waybar = {
-      enable = true;
-      package = pkgs.waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-      });
     };
     thunar = {
       enable = true;
@@ -89,10 +78,20 @@
       ];
     };
   };
+  
   services.hypridle.enable = true;
 
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-wlr ];
+  xdg.portal.xdgOpenUsePortal = true;
+  
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
 
   # Enable scanner support
   users.users.vivien.extraGroups = [ "scanner" "lp" ];
@@ -152,18 +151,10 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # Or disable the firewall altogether.
@@ -180,7 +171,7 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.05"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 
   # Necessary for GTK themes
   programs.dconf.enable = true;
@@ -190,7 +181,7 @@
     (import (builtins.fetchGit {
       url = "https://github.com/nix-community/emacs-overlay.git";
       ref = "master";
-      rev = "452daa6ae6b49c84676abf57f3a0720d78193afd"; # change the revision
+      rev = "2df626665bf05449f81db5a6b4e8196030e88a86"; # change the revision
     }
     ))
     (
@@ -211,16 +202,6 @@
         appmenu-gtk3-module = super.callPackage ../packages/appmenu-gtk3-module {}; # path containing default.nix
       }
     )
-    (
-      self: super:
-      {
-        warpd-wayland =
-            super.warpd.override {
-              withWayland = true;
-              withX = false;
-            };
-      }
-    )
   ];
 
   hardware.bluetooth.enable = true;
@@ -232,14 +213,20 @@
     "electron-27.3.11"
   ];
 
-  programs.kdeconnect = {
-    enable = true;
-    package = pkgs.valent;
+  # zen browser 1password support
+  environment.etc = {
+    "1password/custom_allowed_browsers" = {
+      text = ''
+          .zen-wrapped
+        '';
+      mode = "0755";
+    };
   };
-
+  
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+     plocate
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
      git
@@ -257,11 +244,11 @@
      wpgtk
      xdotool
      keyd
-     warpd-wayland
      w3m
      links2
      lynx
-
+     waybar
+     
      sshpass
 
      texlive.combined.scheme-full
@@ -281,7 +268,7 @@
      pkgs.libsecret
      gnupg
      pinentry
-     pinentry-qt
+     pinentry-gnome3
      
      file
      zlib
@@ -292,9 +279,9 @@
 
      pipx
 
-     qutebrowser
      google-chrome
-     firefox
+     inputs.zen-browser.packages.${pkgs.system}.default
+     
      filezilla
 
      appimage-run
@@ -302,8 +289,6 @@
      writedisk
      zip
      vlc
-
-     weylus
 
      d2
 
@@ -315,14 +300,18 @@
      adwaita-icon-theme
      gnome-themes-extra
      gsettings-desktop-schemas
-     swaynotificationcenter
      ydotool
 
      glib
 
+     bc
+     ripgrep
      jq
+     yq
+     
      hyprpicker
      hyprpaper
+     rose-pine-cursor
 
      wofi
 
@@ -332,6 +321,7 @@
      wf-recorder
      xfce.tumbler
      xfce.ristretto
+     shutter
 
      qt5.qtwayland
      qt6.qmake
@@ -339,6 +329,14 @@
      adwaita-qt
      adwaita-qt6
      networkmanagerapplet
+
+     xdg-desktop-portal-gtk
+     xdg-desktop-portal-wlr
+     
+     way-displays
+     wideriver
+
+     pavucontrol
   ];
 
   services.dbus.enable = true;
@@ -353,12 +351,13 @@
     SDL_VIDEODRIVER = "wayland";
     _JAVA_AWT_WM_NONREPARENTING = "1";
     CLUTTER_BACKEND = "wayland";
-  }; 
-
+    XKB_DEFAULT_OPTIONS = "compose:caps";
+  };
+  
   services.pcscd.enable = true;
   programs.gnupg.agent = {
      enable = true;
-     # pinentryPackage = pkgs.pinentry-qt;
+     pinentryPackage = pkgs.pinentry-gnome3;
      enableSSHSupport = true;
   };
   
@@ -408,7 +407,10 @@
     nss
     openssl
     pango
+
     pipewire
+    pwvucontrol
+
     stdenv.cc.cc
     systemd
     vulkan-loader

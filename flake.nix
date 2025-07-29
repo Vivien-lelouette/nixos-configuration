@@ -1,18 +1,23 @@
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/master";
   inputs.xremap.url = "github:xremap/nix-flake";
+  inputs.waybar-git = {
+    url = "github:Alexays/Waybar";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+  inputs.zen-browser.url = "git+https://codeberg.org/0x57e11a/flake-zen";
 
-  # TODO remove when this issue is fixed : https://github.com/NixOS/nixpkgs/issues/330889
-  inputs.dbeaver-last.url = "github:nixos/nixpkgs/4d10225ee46c0ab16332a2450b493e0277d1741a";
+  outputs = inputs: {
 
-  outputs = { self, nixpkgs, xremap, dbeaver-last }: {
-
-    nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.desktop = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = {
+				inherit inputs;
+			};
       modules =
         [
       	  ./computers/desktop.nix
-          xremap.nixosModules.default
+          inputs.xremap.nixosModules.default
           ./modules/xremap.nix
           ./modules/base.nix
           ./modules/gaming.nix
@@ -20,12 +25,15 @@
         ];
     };
 
-    nixosConfigurations.p15s = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.p15s = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = {
+				inherit inputs;
+			};
       modules =
         [
           ./computers/p15s.nix
-          xremap.nixosModules.default
+          inputs.xremap.nixosModules.default
           ./modules/xremap.nix
           ./modules/base.nix
           ./modules/gaming.nix
@@ -33,29 +41,49 @@
         ];
     };
 
-    nixosConfigurations.t450 = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.t450 = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = {
+				inherit inputs;
+			};
       modules =
         [
           ./computers/t450.nix
-          xremap.nixosModules.default
+          inputs.xremap.nixosModules.default
           ./modules/xremap.nix
           ./modules/base.nix
         ];
     };
 
-    nixosConfigurations.xps = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.xps = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
+    specialArgs = {
+				inherit inputs;
+		};
     modules =
       [
         ./computers/xps.nix
-        xremap.nixosModules.default
+        inputs.xremap.nixosModules.default
         ./modules/xremap.nix
         ./modules/base.nix
         ./modules/development.nix
       ];
-      # TODO remove when this issue is fixed : https://github.com/NixOS/nixpkgs/issues/330889
-      specialArgs = { inherit dbeaver-last; };
+    };
+
+
+    nixosConfigurations.dellp15 = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    specialArgs = {
+				inherit inputs;
+		};
+    modules =
+      [
+        ./computers/dellp15.nix
+        inputs.xremap.nixosModules.default
+        ./modules/xremap.nix
+        ./modules/base.nix
+        ./modules/development.nix
+      ];
     };
   };
 }
