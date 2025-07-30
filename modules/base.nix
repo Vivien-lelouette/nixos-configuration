@@ -23,7 +23,7 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-
+  networking.networkmanager.plugins = [ pkgs.networkmanager-openvpn ];
   # Set your time zone.
   time.timeZone = "Europe/Paris";
 
@@ -220,6 +220,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+     openvpn
+     networkmanager-openvpn
+
      plocate
      vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
      wget
